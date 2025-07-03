@@ -7,6 +7,7 @@ export default function TaskForm({ onAdd }) {
     e.preventDefault();
     if (!task.title) return;
     onAdd(task);
+    window.location.reload();
     setTask({ title: '', description: '' });
   };
 
