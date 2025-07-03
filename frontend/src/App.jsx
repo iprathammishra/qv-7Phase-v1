@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { use, useEffect, useState } from 'react';
+import TaskForm from './components/TaskForm';
+import TaskList from './components/TaskList';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/tasks')
+      .then(res => res.json())
+      .then(data => setTasks(data))
+      .catch(err => console.log('Fetch error:', err));
+  }, []);
+
+  const addTask = (task) => {
+    fetch('http://localhost:5000/api/tasks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(task),
+    })
+      .then(res => res.json())
+      .then(res => setTasks(prev => [...prev, data]));
+  };
+
+  const deleteTask = (id) => {
+    fetch(`http://localhost:5000/api/tasks/${id}`, { method: 'DELETE' })
+      .then(() => setTasks(prev => prev.filter(t => t._id !== id)));
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <h1>Task Manager</h1>
+      <TaskForm onAdd={addTask} />
+      <TaskList tasks={tasks} onDelete={deleteTask} />
+    </div>
+  );
 }
 
-export default App
+export default App;
