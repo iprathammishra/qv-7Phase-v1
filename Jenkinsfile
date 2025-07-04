@@ -7,12 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/iprathammishra/qv-7Phase-v1.git'
-            }
-        }
-
         stage('Build Backend') {
             steps {
                 dir('backend') {

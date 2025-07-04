@@ -39,7 +39,8 @@ spec:
     spec:
       containers:
         - name: jenkins
-          image: jenkins/jenkins:lts
+          image: custom-jenkins
+          imagePullPolicy: Never
           ports:
             - containerPort: 8080
             - containerPort: 50000
